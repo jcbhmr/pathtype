@@ -1,6 +1,7 @@
 package filepathtype
 
 import (
+	"io/fs"
 	"path/filepath"
 )
 
@@ -66,3 +67,19 @@ func (p FilePath) SplitList() []string {
 func (p FilePath) VolumeName() string {
 	return filepath.VolumeName(string(p))
 }
+
+func FromSlash(path string) FilePath {
+	return FilePath(filepath.FromSlash(path))
+}
+
+func (p FilePath) ToSlash() string {
+	return filepath.ToSlash(string(p))
+}
+
+func (p FilePath) WalkDir(fn WalkDirFunc) error {
+	return filepath.WalkDir(string(p), func(path string, d fs.DirEntry, err error) error {
+		return fn(FilePath(path), d, err)
+	})
+}
+
+type WalkDirFunc func(path FilePath, d fs.DirEntry, err error) error
