@@ -1,4 +1,4 @@
-package pathtype
+package path
 
 import "path"
 

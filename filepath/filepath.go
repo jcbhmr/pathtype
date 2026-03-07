@@ -1,4 +1,4 @@
-package filepathtype
+package filepath
 
 import (
 	"io/fs"
@@ -10,6 +10,14 @@ type FilePath string
 func (p FilePath) Abs() (FilePath, error) {
 	absPlain, err := filepath.Abs(string(p))
 	return FilePath(absPlain), err
+}
+
+func (p FilePath) MustAbs() FilePath {
+	abs, err := p.Abs()
+	if err != nil {
+		panic(err)
+	}
+	return abs
 }
 
 func (p FilePath) Base() string {
