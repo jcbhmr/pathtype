@@ -2,48 +2,38 @@ package pathtype
 
 import "path"
 
-type Path struct {
-	inner string
-}
-
-func From(s string) Path {
-	return Path{inner: s}
-}
-
-func (p Path) Bytes() []byte {
-	return []byte(p.inner)
-}
+type Path string
 
 func (p Path) Base() string {
-	return path.Base(p.inner)
+	return path.Base(string(p))
 }
 
 func (p Path) Clean() Path {
-	return Path{inner: path.Clean(p.inner)}
+	return Path(path.Clean(string(p)))
 }
 
 func (p Path) Dir() Path {
-	return Path{inner: path.Dir(p.inner)}
+	return Path(path.Dir(string(p)))
 }
 
 func (p Path) Ext() string {
-	return path.Ext(p.inner)
+	return path.Ext(string(p))
 }
 
 func (p Path) IsAbs() bool {
-	return path.IsAbs(p.inner)
+	return path.IsAbs(string(p))
 }
 
 func (p Path) Join(elem ...Path) Path {
 	elemPlain := make([]string, 1, len(elem)+1)
-	elemPlain[0] = p.inner
+	elemPlain[0] = string(p)
 	for _, e := range elem {
-		elemPlain = append(elemPlain, e.inner)
+		elemPlain = append(elemPlain, string(e))
 	}
-	return Path{inner: path.Join(elemPlain...)}
+	return Path(path.Join(elemPlain...))
 }
 
 func (p Path) Split() (dir Path, file string) {
-	dirPlain, file := path.Split(p.inner)
-	return Path{inner: dirPlain}, file
+	dirPlain, file := path.Split(string(p))
+	return Path(dirPlain), file
 }
